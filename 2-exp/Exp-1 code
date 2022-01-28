@@ -1,0 +1,149 @@
+total=int(input('Enter no. of bananas at starting'))
+distance=int(input('Enter distance you want to cover'))
+load_capacity=int(input('Enter max load capacity of your camel'))
+lose=0
+start=total
+for i in range(distance):
+    while start>0:
+        start=start-load_capacity
+#Here if condition is checking that camel doesn't move back if there is only one banana left.
+        if start==1:
+            lose=lose-1#Lose is decreased because if camel try to get remaining one banana he will lose one extra banana for covering that two miles.
+#Here we are increasing lose because for moving backward and forward by one mile two bananas will be lose
+        lose=lose+2
+#Here lose is decreased as in last trip camel will not go back.
+    lose=lose-1
+    start=total-lose
+    if start==0:#Condition to check whether it is possible to take a single banana or not.
+        break
+print(start)
+
+
+
+TIC TAC TOE
+
+
+import random
+
+
+class TicTacToe:
+
+    def __init__(self):
+        self.board = []
+
+    def create_board(self):
+        for i in range(3):
+            row = []
+            for j in range(3):
+                row.append('-')
+            self.board.append(row)
+
+    def get_random_first_player(self):
+        return random.randint(0, 1)
+
+    def fix_spot(self, row, col, player):
+        self.board[row][col] = player
+
+    def is_player_win(self, player):
+        win = None
+
+        n = len(self.board)
+
+        # checking rows
+        for i in range(n):
+            win = True
+            for j in range(n):
+                if self.board[i][j] != player:
+                    win = False
+                    break
+            if win:
+                return win
+
+        # checking columns
+        for i in range(n):
+            win = True
+            for j in range(n):
+                if self.board[j][i] != player:
+                    win = False
+                    break
+            if win:
+                return win
+
+        # checking diagonals
+        win = True
+        for i in range(n):
+            if self.board[i][i] != player:
+                win = False
+                break
+        if win:
+            return win
+
+        win = True
+        for i in range(n):
+            if self.board[i][n - 1 - i] != player:
+                win = False
+                break
+        if win:
+            return win
+        return False
+
+        for row in self.board:
+            for item in row:
+                if item == '-':
+                    return False
+        return True
+
+    def is_board_filled(self):
+        for row in self.board:
+            for item in row:
+                if item == '-':
+                    return False
+        return True
+
+    def swap_player_turn(self, player):
+        return 'X' if player == 'O' else 'O'
+
+    def show_board(self):
+        for row in self.board:
+            for item in row:
+                print(item, end=" ")
+            print()
+
+    def start(self):
+        self.create_board()
+
+        player = 'X' if self.get_random_first_player() == 1 else 'O'
+        while True:
+            print(f"Player {player} turn")
+
+            self.show_board()
+
+            # taking user input
+            row, col = list(
+                map(int, input("Enter row and column numbers to fix spot: ").split()))
+            print()
+
+            # fixing the spot
+            self.fix_spot(row - 1, col - 1, player)
+
+            # checking whether current player is won or not
+            if self.is_player_win(player):
+                print(f"Player {player} wins the game!")
+                break
+
+            # checking whether the game is draw or not
+            if self.is_board_filled():
+                print("Match Draw!")
+                break
+
+            # swapping the turn
+            player = self.swap_player_turn(player)
+
+        # showing the final view of board
+        print()
+        self.show_board()
+
+
+# starting the game
+tic_tac_toe = TicTacToe()
+tic_tac_toe.start()
